@@ -5,6 +5,7 @@ from fastapi.responses import HTMLResponse
 from app.db import create_db_and_tables
 
 from app.task import routers as Task
+from app.product import routers as Product
 app = FastAPI()
 
 version = "v1"
@@ -35,9 +36,21 @@ app = FastAPI(
             "name": "Tasks",
             "description": "Lista de Tareas",
         },
+        {
+            "name": "Products",
+            "description": "Lista de Products",
+        },
+        {
+            "name": "Customers",
+            "description": "Lista de Customers",
+        },
     ],
 )
 app.include_router(Task.router, prefix="/tasks", tags=["Tasks"])
+
+app.include_router(Product.router, prefix="/products", tags=["Products"])
+#app.include_router(Customers.router, prefix="/customers", tags=["Customers"])
+
 
 @app.get("/", response_class=HTMLResponse)
 async def read_items():
