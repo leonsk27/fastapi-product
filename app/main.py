@@ -1,3 +1,5 @@
+import os
+import uvicorn
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from app.db import create_db_and_tables
@@ -49,3 +51,7 @@ async def read_items():
         </body>
     </html>
     """
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
