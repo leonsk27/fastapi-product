@@ -1,5 +1,5 @@
-# FastAPI - Transaction
-## Transaction system
+# FastAPI
+## Product and Task system
 
 Es un API de un Sistema de tareas, usando FastApi con Python.
 El siguiente sistema de transacciones contiene:
