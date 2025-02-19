@@ -10,8 +10,8 @@ class ProductService:
     no_task:str = "Product doesn't exits"
     # CREATE
     # ----------------------
-    def create_product(self, plan_data: ProductCreate, session: SessionDep):
-        product_db = Product.model_validate(plan_data.model_dump())
+    def create_product(self, item_data: ProductCreate, session: SessionDep):
+        product_db = Product.model_validate(item_data.model_dump())
         session.add(product_db)
         session.commit()
         session.refresh(product_db)
@@ -19,8 +19,8 @@ class ProductService:
 
     # GET ONE
     # ----------------------
-    def get_product(self, plan_id: int, session: SessionDep):
-        product_db = session.get(Product, plan_id)
+    def get_product(self, item_id: int, session: SessionDep):
+        product_db = session.get(Product, item_id)
         if not product_db:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail=self.no_task
@@ -29,14 +29,14 @@ class ProductService:
 
     # UPDATE
     # ----------------------
-    def update_product(self, plan_id: int, plan_data: ProductUpdate, session: SessionDep):
-        product_db = session.get(Product, plan_id)
+    def update_product(self, item_id: int, item_data: ProductUpdate, session: SessionDep):
+        product_db = session.get(Product, item_id)
         if not product_db:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail=self.no_task
             )
-        plan_data_dict = plan_data.model_dump(exclude_unset=True)
-        product_db.sqlmodel_update(plan_data_dict)
+        item_data_dict = item_data.model_dump(exclude_unset=True)
+        product_db.sqlmodel_update(item_data_dict)
         session.add(product_db)
         session.commit()
         session.refresh(product_db)
@@ -49,8 +49,8 @@ class ProductService:
 
     # DELETE
     # ----------------------
-    def delete_product(self, plan_id: int, session: SessionDep):
-        product_db = session.get(Product, plan_id)
+    def delete_product(self, item_id: int, session: SessionDep):
+        product_db = session.get(Product, item_id)
         if not product_db:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail=self.no_task
