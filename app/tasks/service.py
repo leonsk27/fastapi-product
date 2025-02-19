@@ -2,8 +2,8 @@ from fastapi import HTTPException, status
 from sqlmodel import select
 
 from app.db import SessionDep
-from app.task.models import Task
-from app.task.schemas import TaskCreate, TaskUpdate
+from app.tasks.models import Task
+from app.tasks.schemas import TaskCreate, TaskUpdate
 
 class TaskService:
     no_task:str = "Task doesn't exits"

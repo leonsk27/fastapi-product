@@ -2,16 +2,16 @@ from fastapi import HTTPException, status
 from sqlmodel import select
 
 from app.db import SessionDep
-from app.product.models import Product
-from app.product.schemas import ProductCreate, ProductUpdate
+from app.productsCategory.models import ProductCategory
+from app.productsCategory.schemas import ProductCategoryCreate, ProductCategoryUpdate
 
 
-class ProductService:
+class ProductCategoryService:
     no_task:str = "Product doesn't exits"
     # CREATE
     # ----------------------
-    def create_product(self, item_data: ProductCreate, session: SessionDep):
-        product_db = Product.model_validate(item_data.model_dump())
+    def create_product_category(self, item_data: ProductCategoryCreate, session: SessionDep):
+        product_db = ProductCategory.model_validate(item_data.model_dump())
         session.add(product_db)
         session.commit()
         session.refresh(product_db)
@@ -19,8 +19,8 @@ class ProductService:
 
     # GET ONE
     # ----------------------
-    def get_product(self, item_id: int, session: SessionDep):
-        product_db = session.get(Product, item_id)
+    def get_product_category(self, item_id: int, session: SessionDep):
+        product_db = session.get(ProductCategory, item_id)
         if not product_db:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail=self.no_task
@@ -29,8 +29,8 @@ class ProductService:
 
     # UPDATE
     # ----------------------
-    def update_product(self, item_id: int, item_data: ProductUpdate, session: SessionDep):
-        product_db = session.get(Product, item_id)
+    def update_product_category(self, item_id: int, item_data: ProductCategoryUpdate, session: SessionDep):
+        product_db = session.get(ProductCategory, item_id)
         if not product_db:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail=self.no_task
@@ -44,13 +44,13 @@ class ProductService:
 
     # GET ALL PLANS
     # ----------------------
-    def get_products(self, session: SessionDep):
-        return session.exec(select(Product)).all()
+    def get_product_categories(self, session: SessionDep):
+        return session.exec(select(ProductCategory)).all()
 
     # DELETE
     # ----------------------
-    def delete_product(self, item_id: int, session: SessionDep):
-        product_db = session.get(Product, item_id)
+    def delete_product_category(self, item_id: int, session: SessionDep):
+        product_db = session.get(ProductCategory, item_id)
         if not product_db:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail=self.no_task

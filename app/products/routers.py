@@ -2,9 +2,9 @@
 from fastapi import APIRouter, status
 
 from app.db import SessionDep
-from app.product.models import Product
-from app.product.schemas import ProductCreate, ProductUpdate
-from app.product.service import ProductService
+from app.products.models import Product
+from app.products.schemas import ProductCreate, ProductUpdate
+from app.products.service import ProductService
 
 router = APIRouter()
 service = ProductService()

@@ -4,8 +4,9 @@ from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from app.db import create_db_and_tables
 
-from app.task import routers as Task
-from app.product import routers as Product
+from app.tasks import routers as Task
+from app.products import routers as Product
+from app.productsCategory import routers as ProductCategory
 app = FastAPI()
 
 version = "v1"
@@ -47,8 +48,8 @@ app = FastAPI(
     ],
 )
 app.include_router(Task.router, prefix="/tasks", tags=["Tasks"])
-
 app.include_router(Product.router, prefix="/products", tags=["Products"])
+app.include_router(ProductCategory.router, prefix="/products_category", tags=["Products Category"])
 #app.include_router(Customers.router, prefix="/customers", tags=["Customers"])
 
 
