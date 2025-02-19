@@ -1,4 +1,5 @@
 
+from typing import Optional
 from sqlmodel import Field, SQLModel
 
 class ProductCategoryBase(SQLModel):
@@ -11,3 +12,8 @@ class ProductCategoryCreate(ProductCategoryBase):
 
 class ProductCategoryUpdate(ProductCategoryBase):
     pass
+
+class ProductCategoryRead(SQLModel):
+    id: int
+    name: str
+    description: Optional[str] = None

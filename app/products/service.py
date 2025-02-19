@@ -1,10 +1,9 @@
 from fastapi import HTTPException, status
 from sqlmodel import select
-
+from sqlalchemy.orm import selectinload
 from app.db import SessionDep
 from app.products.models import Product
 from app.products.schemas import ProductCreate, ProductUpdate
-
 
 class ProductService:
     no_task:str = "Product doesn't exits"
@@ -20,10 +19,16 @@ class ProductService:
     # GET ONE
     # ----------------------
     def get_product(self, item_id: int, session: SessionDep):
-        product_db = session.get(Product, item_id)
+        statement = (
+            select(Product)
+            .where(Product.id == item_id)
+            .options(selectinload(Product.category))  # Cargar la categoría
+        )
+        product_db = session.exec(statement).first()
+
         if not product_db:
             raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail=self.no_task
+                status_code=status.HTTP_404_NOT_FOUND, detail=self.no_product
             )
         return product_db
 
@@ -45,7 +50,8 @@ class ProductService:
     # GET ALL PLANS
     # ----------------------
     def get_products(self, session: SessionDep):
-        return session.exec(select(Product)).all()
+        statement = select(Product).options(selectinload(Product.category))  # Cargar categorías
+        return session.exec(statement).all()
 
     # DELETE
     # ----------------------

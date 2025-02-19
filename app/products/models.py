@@ -1,7 +1,7 @@
 
 from datetime import datetime
 from typing import Optional,TYPE_CHECKING
-from sqlalchemy import Column, DateTime, func
+from sqlalchemy import DateTime, func, Column
 from sqlmodel import Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
@@ -15,8 +15,7 @@ class Product(SQLModel, table=True):
     image: str = Field(default=None)
 
     category_id: Optional[int] = Field(default=None, foreign_key="product_category.id")
-    
-    category: Optional["ProductCategory"] = Relationship(back_populates="products") 
+    category: Optional["ProductCategory"] = Relationship(back_populates="products")
 
     created_at: Optional[datetime] = Field(
         default=None,
