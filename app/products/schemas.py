@@ -7,11 +7,10 @@ class ProductBase(SQLModel):
     price: int = 0
     description: Optional[str] = None
     image: Optional[str] = None
-    category_id: Optional[int] = None
 
 # Modelo para crear una nueva tarea (hereda de TaskBase)
 class ProductCreate(ProductBase):
-    pass
+    category_id: Optional[int] = None
   
 class ProductUpdate(SQLModel):
     title: Optional[str] = None
