@@ -1,9 +1,11 @@
 
 from datetime import datetime
-from typing import Optional
+from typing import Optional,TYPE_CHECKING
 from sqlalchemy import Column, DateTime, func
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, Relationship, SQLModel
 
+if TYPE_CHECKING:
+    from app.products_category.models import ProductCategory
 class Product(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     title: str = Field(default=None)
@@ -11,6 +13,11 @@ class Product(SQLModel, table=True):
     description: str | None = Field(default=None)
     category: str | None = Field(default=None)
     image: str = Field(default=None)
+
+    category_id: Optional[int] = Field(default=None, foreign_key="product_category.id")
+    
+    category: Optional["ProductCategory"] = Relationship(back_populates="products") 
+
     created_at: Optional[datetime] = Field(
         default=None,
         sa_column=Column(

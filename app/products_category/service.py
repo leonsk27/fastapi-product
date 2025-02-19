@@ -2,8 +2,8 @@ from fastapi import HTTPException, status
 from sqlmodel import select
 
 from app.db import SessionDep
-from app.productsCategory.models import ProductCategory
-from app.productsCategory.schemas import ProductCategoryCreate, ProductCategoryUpdate
+from app.products_category.models import ProductCategory
+from app.products_category.schemas import ProductCategoryCreate, ProductCategoryUpdate
 
 
 class ProductCategoryService:

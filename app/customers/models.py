@@ -3,14 +3,15 @@ from datetime import datetime
 from typing import Optional
 from sqlalchemy import Column, DateTime, func
 from sqlmodel import Field, SQLModel
+from pydantic import EmailStr
 
-class Customers(SQLModel, table=True):
+class Customer(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    title: str = Field(default=None)
-    price: int = 0
+    name: str = Field(default=None)
+    last_name: str | None = Field(default=None)
     description: str | None = Field(default=None)
-    category: str | None = Field(default=None)
-    image: str = Field(default=None)
+    email: EmailStr = Field(default=None)
+    age: int = Field(default=None)
     created_at: Optional[datetime] = Field(
         default=None,
         sa_column=Column(

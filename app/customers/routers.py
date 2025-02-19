@@ -2,8 +2,8 @@
 from fastapi import APIRouter, status
 
 from app.db import SessionDep
-from app.customers.models import Product
-from app.customers.schemas import ProductCreate, ProductUpdate
+from app.customers.models import Customer
+from app.customers.schemas import CustomerCreate, CustomerUpdate
 from app.customers.service import CustomerService
 
 router = APIRouter()
@@ -12,45 +12,45 @@ service = CustomerService()
 
 # CREATE - Crear una nueva tarea
 # ----------------------
-@router.post("/", response_model=Product, status_code=status.HTTP_201_CREATED)
-async def create_product(
-    product_data: ProductCreate,
+@router.post("/", response_model=Customer, status_code=status.HTTP_201_CREATED)
+async def create_customer(
+    customer_data: CustomerCreate,
     session: SessionDep
     ):
-    return service.create_product(product_data, session)
+    return service.create_customer(customer_data, session)
 # GET ONE - Obtener una tarea por ID
 # ----------------------
-@router.get("/{product_id}", response_model=Product)
-async def get_product(
-    product_id: int,
+@router.get("/{customer_id}", response_model=Customer)
+async def get_customer(
+    customer_id: int,
     session: SessionDep
 ):
-    return service.get_product(product_id,session)
+    return service.get_customer(customer_id,session)
 
 # UPDATE - Actualizar una tarea existente
 # ----------------------
-@router.patch("/{product_id}", response_model=Product, status_code=status.HTTP_201_CREATED)
-async def update_product(
-    product_id: int,
-    product_data: ProductUpdate,
+@router.patch("/{customer_id}", response_model=Customer, status_code=status.HTTP_201_CREATED)
+async def update_customer(
+    customer_id: int,
+    customer_data: CustomerUpdate,
     session: SessionDep
 ):
     
-    return service.update_product(product_id, product_data, session)
+    return service.update_customer(customer_id, customer_data, session)
 
 # GET ALL TASK - Obtener todas las tareas
 # ----------------------
-@router.get("/", response_model=list[Product])
-async def get_products(
+@router.get("/", response_model=list[Customer])
+async def get_customers(
     session: SessionDep
 ):
-    return service.get_products(session)
+    return service.get_customers(session)
 
 # DELETE - Eliminar una tarea
 # ----------------------
-@router.delete("/{product_id}")
-async def delete_product(
-    product_id: int,
+@router.delete("/{customer_id}")
+async def delete_customer(
+    customer_id: int,
     session: SessionDep,
 ):
-    return service.delete_product(product_id, session)
+    return service.delete_customer(customer_id, session)
