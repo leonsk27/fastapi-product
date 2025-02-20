@@ -8,6 +8,7 @@ from app.tasks import routers as Task
 from app.products import routers as Product
 from app.products_category import routers as ProductCategory
 from app.customers import routers as Customer
+from app.products_brand import routers as Brand
 app = FastAPI()
 
 version = "v1"
@@ -52,6 +53,7 @@ app.include_router(Task.router, prefix="/tasks", tags=["Tasks"])
 app.include_router(Product.router, prefix="/products", tags=["Products"])
 app.include_router(ProductCategory.router, prefix="/products_category", tags=["Products Category"])
 app.include_router(Customer.router, prefix="/customers", tags=["Customers"])
+app.include_router(Brand.router, prefix="/brand", tags=["Products Brand"])
 
 
 @app.get("/", response_class=HTMLResponse)

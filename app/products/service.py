@@ -4,17 +4,41 @@ from sqlalchemy.orm import selectinload
 from app.db import SessionDep
 from app.products.models import Product
 from app.products.schemas import ProductCreate, ProductUpdate
+from app.products_category.models import ProductCategory
+from app.products_brand.models import ProductBrand
 
 class ProductService:
     no_task:str = "Product doesn't exits"
     # CREATE
     # ----------------------
     def create_product(self, item_data: ProductCreate, session: SessionDep):
+
         product_db = Product.model_validate(item_data.model_dump())
-        session.add(product_db)
-        session.commit()
-        session.refresh(product_db)
-        return product_db
+        
+        category_data = session.get(ProductCategory, product_db.category_id)
+        if not category_data:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail=f"Category Id:{product_db.category_id} doesn't exist"
+            )
+        '''
+        brand_data = session.get(ProductBrand, product_db.brand_id)
+        if not brand_data:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail=f"Brand Id:{product_db.category_id} doesn't exist"
+            )
+        '''
+        
+        try:
+            session.add(product_db)
+            session.commit()
+            session.refresh(product_db)
+            return product_db
+        except Exception:
+            session.rollback
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Internal Server error, create Product",
+            )
 
     # GET ONE
     # ----------------------
@@ -23,6 +47,7 @@ class ProductService:
             select(Product)
             .where(Product.id == item_id)
             .options(selectinload(Product.category))  # Cargar la categoría
+            .options(selectinload(Product.brand)) 
         )
         product_db = session.exec(statement).first()
 
@@ -50,7 +75,13 @@ class ProductService:
     # GET ALL PLANS
     # ----------------------
     def get_products(self, session: SessionDep):
-        statement = select(Product).options(selectinload(Product.category))  # Cargar categorías
+        
+        statement = (
+            select(Product)
+            .options(selectinload(Product.category))  # Cargar la categoría
+            .options(selectinload(Product.brand)) 
+        )
+        
         return session.exec(statement).all()
 
     # DELETE

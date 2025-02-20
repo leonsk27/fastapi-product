@@ -29,7 +29,7 @@ postgres:$ exit
 CLONAR EL PROYECTO
 Iniciamos con la clonación del proyecto, en la carpeta que utilice para desarrollo
 ```
-$ git@github.com:henrytaby/fastapi-product.git
+$ git clone git@github.com:henrytaby/fastapi-product.git
 ```
 INGRESAR AL PROYECTO
 
