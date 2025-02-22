@@ -1,7 +1,7 @@
 import os
 import uvicorn
 from fastapi import FastAPI
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from app.db import create_db_and_tables
 
@@ -71,16 +71,7 @@ app.include_router(Brand.router, prefix="/brand", tags=["Products Brand"])
 
 @app.get("/", response_class=HTMLResponse)
 async def read_items():
-    return """
-    <html>
-        <head>
-            <title>Bienvenido</title>
-        </head>
-        <body>
-            <h1>API con FastAPI!</h1>
-        </body>
-    </html>
-    """
+    return FileResponse("./app/index.html")
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
