@@ -1,10 +1,12 @@
 
-from fastapi import APIRouter, status
+from fastapi import APIRouter, status, Depends
 
 from app.db import SessionDep
 from app.customers.models import Customer
 from app.customers.schemas import CustomerCreate, CustomerUpdate
 from app.customers.service import CustomerService
+from app.auth.utils import get_current_user
+from app.auth.models import User
 
 router = APIRouter()
 service = CustomerService()
@@ -15,7 +17,8 @@ service = CustomerService()
 @router.post("/", response_model=Customer, status_code=status.HTTP_201_CREATED)
 async def create_customer(
     customer_data: CustomerCreate,
-    session: SessionDep
+    session: SessionDep,
+    current_user: User = Depends(get_current_user)
     ):
     return service.create_customer(customer_data, session)
 # GET ONE - Obtener una tarea por ID
@@ -42,7 +45,8 @@ async def update_customer(
 # ----------------------
 @router.get("/", response_model=list[Customer])
 async def get_customers(
-    session: SessionDep
+    session: SessionDep,
+    current_user: User = Depends(get_current_user)
 ):
     return service.get_customers(session)
 

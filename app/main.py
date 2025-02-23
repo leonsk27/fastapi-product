@@ -1,15 +1,17 @@
 import os
 import uvicorn
 from fastapi import FastAPI
-from fastapi.responses import HTMLResponse, FileResponse
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
-from app.db import create_db_and_tables
 
+from app.db import create_db_and_tables
 from app.tasks import routers as Task
 from app.products import routers as Product
 from app.products_category import routers as ProductCategory
 from app.customers import routers as Customer
 from app.products_brand import routers as Brand
+from app.auth import routers as Auth
+
 app = FastAPI()
 
 version = "v1"
@@ -61,15 +63,15 @@ app.add_middleware(
     allow_headers=["*"],  # Permitir todos los encabezados
 )
 
-
 app.include_router(Task.router, prefix="/tasks", tags=["Tasks"])
 app.include_router(Product.router, prefix="/products", tags=["Products"])
 app.include_router(ProductCategory.router, prefix="/products_category", tags=["Products Category"])
 app.include_router(Customer.router, prefix="/customers", tags=["Customers"])
 app.include_router(Brand.router, prefix="/brand", tags=["Products Brand"])
+app.include_router(Auth.router, prefix="/auth", tags=["Auth"])
 
 
-@app.get("/", response_class=HTMLResponse)
+@app.get("/")
 async def read_items():
     return FileResponse("./app/index.html")
 
