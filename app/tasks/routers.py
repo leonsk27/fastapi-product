@@ -3,7 +3,7 @@ from fastapi import APIRouter, status
 
 from app.db import SessionDep
 from app.tasks.models import Task
-from app.tasks.schemas import TaskCreate, TaskUpdate
+from app.tasks import schemas
 from app.tasks.service import TaskService
 
 router = APIRouter()
@@ -14,9 +14,12 @@ service = TaskService()
 # ----------------------
 @router.post("/", response_model=Task, status_code=status.HTTP_201_CREATED)
 async def create_task(
-    task_data: TaskCreate,
+    task_data: schemas.TaskCreate,
     session: SessionDep
     ):
+    '''
+     Create a new task.
+    '''
     return service.create_task(task_data, session)
 # GET ONE - Obtener una tarea por ID
 # ----------------------
@@ -25,6 +28,9 @@ async def get_task(
     task_id: int,
     session: SessionDep
 ):
+    '''
+    Get a task by ID.
+    '''
     return service.get_task(task_id,session)
 
 # UPDATE - Actualizar una tarea existente
@@ -32,7 +38,7 @@ async def get_task(
 @router.patch("/{task_id}", response_model=Task, status_code=status.HTTP_201_CREATED)
 async def update_task(
     task_id: int,
-    task_data: TaskUpdate,
+    task_data: schemas.TaskUpdate,
     session: SessionDep
 ):
     
@@ -44,6 +50,9 @@ async def update_task(
 async def get_tasks(
     session: SessionDep
 ):
+    '''
+    Get all tasks.
+    '''
     return service.get_tasks(session)
 
 # DELETE - Eliminar una tarea
@@ -53,4 +62,7 @@ async def delete_task(
     task_id: int,
     session: SessionDep,
 ):
+    '''
+    Delete a task by ID.
+    '''
     return service.delete_task(task_id, session)

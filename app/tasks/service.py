@@ -3,13 +3,13 @@ from sqlmodel import select
 
 from app.db import SessionDep
 from app.tasks.models import Task
-from app.tasks.schemas import TaskCreate, TaskUpdate
+from app.tasks import schemas
 
 class TaskService:
     no_task:str = "Task doesn't exits"
     # CREATE
     # ----------------------
-    def create_task(self, item_data: TaskCreate, session: SessionDep):
+    def create_task(self, item_data: schemas.TaskCreate, session: SessionDep):
         task_db = Task.model_validate(item_data.model_dump())
         session.add(task_db)
         session.commit()
@@ -28,7 +28,7 @@ class TaskService:
 
     # UPDATE
     # ----------------------
-    def update_task(self, item_id: int, item_data: TaskUpdate, session: SessionDep):
+    def update_task(self, item_id: int, item_data: schemas.TaskUpdate, session: SessionDep):
         task_db = session.get(Task, item_id)
         if not task_db:
             raise HTTPException(
