@@ -17,9 +17,9 @@ async def create_task(
     task_data: schemas.TaskCreate,
     session: SessionDep
     ):
-    '''
+    """
      Create a new task.
-    '''
+    """
     return service.create_task(task_data, session)
 # GET ONE - Obtener una tarea por ID
 # ----------------------
@@ -28,9 +28,9 @@ async def get_task(
     task_id: int,
     session: SessionDep
 ):
-    '''
+    """
     Get a task by ID.
-    '''
+    """
     return service.get_task(task_id,session)
 
 # UPDATE - Actualizar una tarea existente
@@ -41,7 +41,9 @@ async def update_task(
     task_data: schemas.TaskUpdate,
     session: SessionDep
 ):
-    
+    """
+    Update an existing task.
+    """
     return service.update_task(task_id, task_data, session)
 
 # GET ALL TASK - Obtener todas las tareas
@@ -50,9 +52,9 @@ async def update_task(
 async def get_tasks(
     session: SessionDep
 ):
-    '''
+    """
     Get all tasks.
-    '''
+    """
     return service.get_tasks(session)
 
 # DELETE - Eliminar una tarea
@@ -62,7 +64,7 @@ async def delete_task(
     task_id: int,
     session: SessionDep,
 ):
-    '''
-    Delete a task by ID.
-    '''
+    """
+    Delete a task by ID.    
+    """
     return service.delete_task(task_id, session)

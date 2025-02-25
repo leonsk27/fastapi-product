@@ -3,14 +3,14 @@ from sqlmodel import select
 
 from app.db import SessionDep
 from app.products_brand.models import ProductBrand
-from app.products_brand.schemas import ProductBrandCreate, ProductBrandUpdate
+from app.products_brand import schemas
 
 
 class ProductBrandService:
     no_task:str = "Brand doesn't exits"
     # CREATE
     # ----------------------
-    def create_product_brand(self, item_data: ProductBrandCreate, session: SessionDep):
+    def create_product_brand(self, item_data: schemas.ProductBrandCreate, session: SessionDep):
         item_db = ProductBrand.model_validate(item_data.model_dump())
         session.add(item_db)
         session.commit()
@@ -29,7 +29,7 @@ class ProductBrandService:
 
     # UPDATE
     # ----------------------
-    def update_product_brand(self, item_id: int, item_data: ProductBrandUpdate, session: SessionDep):
+    def update_product_brand(self, item_id: int, item_data: schemas.ProductBrandUpdate, session: SessionDep):
         item_db = session.get(ProductBrand, item_id)
         if not item_db:
             raise HTTPException(

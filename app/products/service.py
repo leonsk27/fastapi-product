@@ -3,7 +3,7 @@ from sqlmodel import select
 from sqlalchemy.orm import selectinload
 from app.db import SessionDep
 from app.products.models import Product
-from app.products.schemas import ProductCreate, ProductUpdate
+from app.products import schemas
 from app.products_category.models import ProductCategory
 from app.products_brand.models import ProductBrand
 
@@ -11,7 +11,7 @@ class ProductService:
     no_task:str = "Product doesn't exits"
     # CREATE
     # ----------------------
-    def create_product(self, item_data: ProductCreate, session: SessionDep):
+    def create_product(self, item_data: schemas.ProductCreate, session: SessionDep):
 
         product_db = Product.model_validate(item_data.model_dump())
         
@@ -59,7 +59,7 @@ class ProductService:
 
     # UPDATE
     # ----------------------
-    def update_product(self, item_id: int, item_data: ProductUpdate, session: SessionDep):
+    def update_product(self, item_id: int, item_data: schemas.ProductUpdate, session: SessionDep):
         product_db = session.get(Product, item_id)
         if not product_db:
             raise HTTPException(

@@ -1,13 +1,14 @@
 from typing import Optional
-from sqlmodel import Field, SQLModel,Session,select
-from pydantic import field_validator
+from sqlmodel import Session,select
+from pydantic import BaseModel, Field, field_validator
+
 from datetime import datetime
 from app.db import engine
 from app.products_category.schemas import ProductCategoryRead
 from app.products_brand.schemas import ProductBrandRead
 from app.products_brand.models import ProductBrand
 
-class ProductBase(SQLModel):
+class ProductBase(BaseModel):
     title: str = Field(default=None)
     price: int = 0
     description: Optional[str] = None
@@ -27,7 +28,7 @@ class ProductCreate(ProductBase):
             raise ValueError(f"Brand Id:{value} doesn't exist")
         return value
   
-class ProductUpdate(SQLModel):
+class ProductUpdate(BaseModel):
     title: Optional[str] = None
     price: Optional[int] = None
     description: Optional[str] = None
@@ -36,7 +37,9 @@ class ProductUpdate(SQLModel):
     brand_id: Optional[int] = None
 
 class ProductRead(ProductBase):
-    id: int
-    created_at: Optional[datetime]
+    id: int = Field(description="The primary key")
+    created_at: Optional[datetime] = Field(None, description="The timestamp when the data was created")
     category: Optional[ProductCategoryRead] = None  # Relación con la categoría
     brand: Optional[ProductBrandRead] = None  # Relación con la categoría
+    class Config:
+        from_attributes = True
