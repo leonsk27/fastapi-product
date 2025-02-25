@@ -56,5 +56,4 @@ class TaskService:
             )
         session.delete(task_db)
         session.commit()
-        print("debería salir el mensaje")
         return {"detail": "ok"}

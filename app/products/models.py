@@ -1,7 +1,8 @@
 from typing import Optional, TYPE_CHECKING
 from sqlmodel import Field, Relationship, Column, DateTime, SQLModel
 from datetime import datetime
-from app.models.base_model import BaseModel, get_current_time
+from app.models.base_model import BaseModel
+from app.util.datetime import get_current_time
 
 if TYPE_CHECKING:
     from app.products_category.models import ProductCategory

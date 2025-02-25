@@ -3,7 +3,8 @@ from datetime import datetime
 from sqlmodel import Column, DateTime, Field
 from typing import Optional
 from pydantic import EmailStr
-from app.models.base_model import BaseModel, get_current_time
+from app.models.base_model import BaseModel
+from app.util.datetime import get_current_time
 
 class Customer(BaseModel, table=True):
     name: str = Field(default=None)

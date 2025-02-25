@@ -2,7 +2,8 @@
 from datetime import datetime
 from typing import Optional, List, TYPE_CHECKING
 from sqlmodel import Field, Relationship, Column, DateTime
-from app.models.base_model import BaseModel, get_current_time
+from app.models.base_model import BaseModel
+from app.util.datetime import get_current_time
 
 if TYPE_CHECKING:
     from app.products.models import Product

@@ -1,9 +1,11 @@
-from sqlmodel import SQLModel, Field, Column, DateTime
-from datetime import datetime, timezone
+from sqlmodel import Field, Column, DateTime
+from datetime import datetime
 from typing import Optional
+from app.models.base_model import BaseModel
+from app.util.datetime import get_current_time
 
-class User(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True, description="The primary key")
+class User(BaseModel, table=True):
+    
     username: str = Field(index=True, unique=True)
     email: str = Field(index=True, unique=True)
     first_name: str | None = Field(default=None)
@@ -12,15 +14,15 @@ class User(SQLModel, table=True):
     password_hash: str = Field(exclude=True)
     
     created_at: Optional[datetime] = Field(
-        default_factory=lambda: datetime.now(timezone.utc),
-        sa_column=Column(DateTime(timezone=True), nullable=True),
+        default_factory=get_current_time,
+        sa_column=Column(DateTime(timezone=False), nullable=True),
         description="The timestamp when the data was created"
     )
     updated_at: Optional[datetime] = Field(
         default=None,
         sa_column=Column(
-            DateTime(timezone=True), 
-            onupdate=lambda: datetime.now(timezone.utc), 
+            DateTime(timezone=False), 
+            onupdate=get_current_time, 
             nullable=True
         ),
         description="The timestamp when the data was last updated"
