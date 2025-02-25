@@ -1,17 +1,17 @@
 from fastapi import HTTPException, status
 from sqlmodel import select
 
-from app.db import SessionDep
-from app.products_category.models import ProductCategory
-from app.products_category.schemas import ProductCategoryCreate, ProductCategoryUpdate
+from app.core.db import SessionDep
+from .models import ProductBrand
+from .schemas import ProductBrandCreate, ProductBrandUpdate
 
 
-class ProductCategoryService:
-    no_task:str = "Product doesn't exits"
+class ProductBrandService:
+    no_task:str = "Brand doesn't exits"
     # CREATE
     # ----------------------
-    def create_product_category(self, item_data: ProductCategoryCreate, session: SessionDep):
-        item_db = ProductCategory.model_validate(item_data.model_dump())
+    def create_product_brand(self, item_data: ProductBrandCreate, session: SessionDep):
+        item_db = ProductBrand.model_validate(item_data.model_dump())
         session.add(item_db)
         session.commit()
         session.refresh(item_db)
@@ -19,8 +19,8 @@ class ProductCategoryService:
 
     # GET ONE
     # ----------------------
-    def get_product_category(self, item_id: int, session: SessionDep):
-        item_db = session.get(ProductCategory, item_id)
+    def get_product_brand(self, item_id: int, session: SessionDep):
+        item_db = session.get(ProductBrand, item_id)
         if not item_db:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail=self.no_task
@@ -29,8 +29,8 @@ class ProductCategoryService:
 
     # UPDATE
     # ----------------------
-    def update_product_category(self, item_id: int, item_data: ProductCategoryUpdate, session: SessionDep):
-        item_db = session.get(ProductCategory, item_id)
+    def update_product_brand(self, item_id: int, item_data: ProductBrandUpdate, session: SessionDep):
+        item_db = session.get(ProductBrand, item_id)
         if not item_db:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail=self.no_task
@@ -44,18 +44,18 @@ class ProductCategoryService:
 
     # GET ALL PLANS
     # ----------------------
-    def get_product_categories(self, session: SessionDep):
-        return session.exec(select(ProductCategory)).all()
+    def get_product_brands(self, session: SessionDep):
+        return session.exec(select(ProductBrand)).all()
 
     # DELETE
     # ----------------------
-    def delete_product_category(self, item_id: int, session: SessionDep):
-        item_db = session.get(ProductCategory, item_id)
+    def delete_product_brand(self, item_id: int, session: SessionDep):
+        item_db = session.get(ProductBrand, item_id)
         if not item_db:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail=self.no_task
             )
+        #print(f"Producto {item_db}")
         session.delete(item_db)
         session.commit()
-        
         return {"detail": "ok"}

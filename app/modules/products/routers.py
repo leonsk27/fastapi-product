@@ -1,9 +1,9 @@
 
 from fastapi import APIRouter, status
-from app.db import SessionDep
-from app.products.models import Product
-from app.products import schemas
-from app.products.service import ProductService
+from app.core.db import SessionDep
+from .models import Product
+from .schemas import ProductCreate, ProductRead, ProductUpdate
+from .service import ProductService
 
 router = APIRouter()
 service = ProductService()
@@ -13,13 +13,13 @@ service = ProductService()
 # ----------------------
 @router.post("/", response_model=Product, status_code=status.HTTP_201_CREATED)
 async def create_product(
-    product_data: schemas.ProductCreate,
+    product_data: ProductCreate,
     session: SessionDep
     ):
     return service.create_product(product_data, session)
 # GET ONE - Obtener una tarea por ID
 # ----------------------
-@router.get("/{product_id}", response_model=schemas.ProductRead)
+@router.get("/{product_id}", response_model=ProductRead)
 async def get_product(
     product_id: int,
     session: SessionDep
@@ -31,7 +31,7 @@ async def get_product(
 @router.patch("/{product_id}", response_model=Product, status_code=status.HTTP_201_CREATED)
 async def update_product(
     product_id: int,
-    product_data: schemas.ProductUpdate,
+    product_data: ProductUpdate,
     session: SessionDep
 ):
     
@@ -39,7 +39,7 @@ async def update_product(
 
 # GET ALL TASK - Obtener todas las tareas
 # ----------------------
-@router.get("/", response_model=list[schemas.ProductRead])
+@router.get("/", response_model=list[ProductRead])
 async def get_products(
     session: SessionDep
 ):

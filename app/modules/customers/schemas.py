@@ -1,9 +1,9 @@
 
 from sqlmodel import Session, select
-from pydantic import BaseModel, Field
-from pydantic import EmailStr, field_validator
-from app.db import engine
-from app.customers.models import Customer
+from pydantic import EmailStr, field_validator, BaseModel, Field
+from app.core.db import engine
+from .models import Customer
+
 class CustomerBase(BaseModel):
     name: str = Field(default=None)
     last_name: str | None = Field(default=None)

@@ -1,9 +1,9 @@
 from fastapi import HTTPException, status
 from sqlmodel import select
 
-from app.db import SessionDep
-from app.customers.models import Customer
-from app.customers.schemas import CustomerCreate, CustomerUpdate
+from app.core.db import SessionDep
+from .models import Customer
+from .schemas import CustomerCreate, CustomerUpdate
 
 
 class CustomerService:

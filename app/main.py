@@ -4,13 +4,15 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.db import create_db_and_tables
-from app.tasks import routers as Task
-from app.products import routers as Product
-from app.products_category import routers as ProductCategory
-from app.customers import routers as Customer
-from app.products_brand import routers as Brand
+from app.core.db import create_db_and_tables
 from app.auth import routers as Auth
+
+from app.modules.tasks import routers as Task
+from app.modules.products import routers as Product
+from app.modules.customers import routers as Customer
+
+from app.modules.catalog.products_category import routers as ProductCategory
+from app.modules.catalog.products_brand import routers as Brand
 
 app = FastAPI()
 

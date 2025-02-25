@@ -1,10 +1,10 @@
 
 from fastapi import APIRouter, status, Depends
 
-from app.db import SessionDep
-from app.customers.models import Customer
-from app.customers import schemas
-from app.customers.service import CustomerService
+from app.core.db import SessionDep
+from .models import Customer
+from .schemas import CustomerCreate, CustomerUpdate
+from .service import CustomerService
 from app.auth.utils import get_current_user
 from app.auth.models import User
 
@@ -16,7 +16,7 @@ service = CustomerService()
 # ----------------------
 @router.post("/", response_model=Customer, status_code=status.HTTP_201_CREATED)
 async def create_customer(
-    customer_data: schemas.CustomerCreate,
+    customer_data: CustomerCreate,
     session: SessionDep,
     current_user: User = Depends(get_current_user)
     ):
@@ -35,7 +35,7 @@ async def get_customer(
 @router.patch("/{customer_id}", response_model=Customer, status_code=status.HTTP_201_CREATED)
 async def update_customer(
     customer_id: int,
-    customer_data: schemas.CustomerUpdate,
+    customer_data: CustomerUpdate,
     session: SessionDep
 ):
     

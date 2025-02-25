@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import Session
 from fastapi.security import OAuth2PasswordRequestForm
 from app.auth import schemas, utils
-from app.db import SessionDep,get_session
+from app.core.db import SessionDep,get_session
 from app.auth.models import User as UserModel
 
 from app.auth.service import AuthService

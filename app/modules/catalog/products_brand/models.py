@@ -6,7 +6,8 @@ from app.models.base_model import BaseModel
 from app.util.datetime import get_current_time
 
 if TYPE_CHECKING:
-    from app.products.models import Product
+    from app.modules.products.models import Product
+    
 class ProductBrand(BaseModel, table=True):
     __tablename__ = "product_brand"
     

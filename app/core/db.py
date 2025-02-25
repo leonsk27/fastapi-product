@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from typing import Annotated
 from fastapi import Depends
 from sqlmodel import Session, create_engine, SQLModel
-from app.config import Config
+from app.core.config import Config
 
 '''
 Docs about this implementation

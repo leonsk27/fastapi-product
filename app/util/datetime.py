@@ -1,6 +1,6 @@
 from datetime import datetime
 import pytz
-from app.config import Config
+from app.core.config import Config
 
 timezone_app = pytz.FixedOffset(Config.TIME_ZONE * 60)
 

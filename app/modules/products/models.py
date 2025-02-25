@@ -1,12 +1,12 @@
 from typing import Optional, TYPE_CHECKING
-from sqlmodel import Field, Relationship, Column, DateTime, SQLModel
+from sqlmodel import Field, Relationship, Column, DateTime
 from datetime import datetime
 from app.models.base_model import BaseModel
 from app.util.datetime import get_current_time
 
 if TYPE_CHECKING:
-    from app.products_category.models import ProductCategory
-    from app.products_brand.models import ProductBrand
+    from ..catalog.products_category.models import ProductCategory
+    from ..catalog.products_brand.models import ProductBrand
 
 class Product(BaseModel, table=True):
     '''

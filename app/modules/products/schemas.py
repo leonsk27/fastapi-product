@@ -3,10 +3,10 @@ from sqlmodel import Session,select
 from pydantic import BaseModel, Field, field_validator
 
 from datetime import datetime
-from app.db import engine
-from app.products_category.schemas import ProductCategoryRead
-from app.products_brand.schemas import ProductBrandRead
-from app.products_brand.models import ProductBrand
+from app.core.db import engine
+from ..catalog.products_category.schemas import ProductCategoryRead
+from ..catalog.products_brand.schemas import ProductBrandRead
+from ..catalog.products_brand.models import ProductBrand
 
 class ProductBase(BaseModel):
     title: str = Field(default=None)

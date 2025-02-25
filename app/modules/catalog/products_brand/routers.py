@@ -1,10 +1,10 @@
 
 from fastapi import APIRouter, status
 
-from app.db import SessionDep
-from app.products_brand.models import ProductBrand
-from app.products_brand import schemas
-from app.products_brand.service import ProductBrandService
+from app.core.db import SessionDep
+from .models import ProductBrand
+from .schemas import ProductBrandCreate, ProductBrandUpdate
+from .service import ProductBrandService
 
 router = APIRouter()
 service = ProductBrandService()
@@ -14,7 +14,7 @@ service = ProductBrandService()
 # ----------------------
 @router.post("/", response_model=ProductBrand, status_code=status.HTTP_201_CREATED)
 async def create_product_brand(
-    product_brand_data: schemas.ProductBrandCreate,
+    product_brand_data: ProductBrandCreate,
     session: SessionDep
     ):
     return service.create_product_brand(product_brand_data, session)
@@ -32,7 +32,7 @@ async def get_product_brand(
 @router.patch("/{product_brand_id}", response_model=ProductBrand, status_code=status.HTTP_201_CREATED)
 async def update_product_brand(
     product_brand_id: int,
-    product_brand_data: schemas.ProductBrandUpdate,
+    product_brand_data: ProductBrandUpdate,
     session: SessionDep
 ):
     

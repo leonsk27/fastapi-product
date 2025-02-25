@@ -7,9 +7,9 @@ from fastapi.security import OAuth2PasswordBearer
 
 from app.auth import schemas, models
 
-from app.db import get_session, SessionDep
+from app.core.db import get_session, SessionDep
 from app.auth.models import User as UserModel
-from app.config import Config
+from app.core.config import Config
 
 SECRET_KEY = Config.SECRET_KEY
 ALGORITHM = Config.ALGORITHM

@@ -1,10 +1,10 @@
 
 from fastapi import APIRouter, status
 
-from app.db import SessionDep
-from app.tasks.models import Task
-from app.tasks import schemas
-from app.tasks.service import TaskService
+from app.core.db import SessionDep
+from .models import Task
+from .schemas import TaskCreate,TaskUpdate
+from .service import TaskService
 
 router = APIRouter()
 service = TaskService()
@@ -14,7 +14,7 @@ service = TaskService()
 # ----------------------
 @router.post("/", response_model=Task, status_code=status.HTTP_201_CREATED)
 async def create_task(
-    task_data: schemas.TaskCreate,
+    task_data: TaskCreate,
     session: SessionDep
     ):
     """
@@ -38,7 +38,7 @@ async def get_task(
 @router.patch("/{task_id}", response_model=Task, status_code=status.HTTP_201_CREATED)
 async def update_task(
     task_id: int,
-    task_data: schemas.TaskUpdate,
+    task_data: TaskUpdate,
     session: SessionDep
 ):
     """

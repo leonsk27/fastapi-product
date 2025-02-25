@@ -4,7 +4,7 @@ from jose import JWTError
 from sqlmodel import Field, Session, SQLModel, select
 from fastapi.security import OAuth2PasswordRequestForm
 from datetime import timedelta
-from app.db import SessionDep
+from app.core.db import SessionDep
 from app.auth import models, schemas, utils
 
 

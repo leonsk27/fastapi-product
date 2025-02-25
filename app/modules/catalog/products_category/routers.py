@@ -1,10 +1,10 @@
 
 from fastapi import APIRouter, status
 
-from app.db import SessionDep
-from app.products_category.models import ProductCategory
-from app.products_category.schemas import ProductCategoryCreate, ProductCategoryUpdate
-from app.products_category.service import ProductCategoryService
+from app.core.db import SessionDep
+from .models import ProductCategory
+from .schemas import ProductCategoryCreate, ProductCategoryUpdate
+from .service import ProductCategoryService
 
 router = APIRouter()
 service = ProductCategoryService()
