@@ -5,14 +5,7 @@ from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.db import create_db_and_tables
-from app.auth import routers as Auth
-
-from app.modules.tasks import routers as Task
-from app.modules.products import routers as Product
-from app.modules.customers import routers as Customer
-
-from app.modules.catalog.products_category import routers as ProductCategory
-from app.modules.catalog.products_brand import routers as Brand
+from app.core.routers import router as api_router 
 
 app = FastAPI()
 
@@ -24,10 +17,6 @@ API de un Sistema de tareas y productos, usando FastApi con Python.
 Funciones;
 - Crear, Leer, Actualizar y eliminar Tareas
 """
-
-version_prefix = f"/api/{version}"
-
-
 app = FastAPI(
     lifespan=create_db_and_tables,
     title="AppTransactionFastAPI",
@@ -55,7 +44,6 @@ app = FastAPI(
     ],
 )
 
-
 # Habilitar CORS
 app.add_middleware(
     CORSMiddleware,
@@ -65,12 +53,10 @@ app.add_middleware(
     allow_headers=["*"],  # Permitir todos los encabezados
 )
 
-app.include_router(Task.router, prefix="/tasks", tags=["Tasks"])
-app.include_router(Product.router, prefix="/products", tags=["Products"])
-app.include_router(ProductCategory.router, prefix="/products_category", tags=["Products Category"])
-app.include_router(Customer.router, prefix="/customers", tags=["Customers"])
-app.include_router(Brand.router, prefix="/brand", tags=["Products Brand"])
-app.include_router(Auth.router, prefix="/auth", tags=["Auth"])
+#version_prefix = f"/api/{version}"
+version_prefix = "/api"
+# Incluir el router principal
+app.include_router(api_router)
 
 
 @app.get("/")
