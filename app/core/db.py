@@ -4,6 +4,10 @@ from fastapi import Depends
 from sqlmodel import Session, create_engine, SQLModel
 from app.core.config import Config
 
+# from ..models.module import Module, ModuleGroup
+# from ..models.role import Role, RoleModule
+# from ..models.user import User, UserRole, UserRevokedToken
+
 '''
 Docs about this implementation
 https://fastapi.tiangolo.com/tutorial/sql-databases/#run-the-app

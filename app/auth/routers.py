@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from fastapi.security import OAuth2PasswordRequestForm
 from app.auth import schemas, utils
 from app.core.db import SessionDep
@@ -21,9 +21,10 @@ def create_user(user: schemas.UserCreate, db: SessionDep):
 @router.post("/token", response_model=schemas.Token)
 async def login_for_access_token(
     db: SessionDep, 
-    form_data: OAuth2PasswordRequestForm = Depends()
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    request: Request = None
 ):
-    return service.login_for_access_token(db,form_data)
+    return service.login_for_access_token(db,form_data,request)
 
 
 @router.get("/users/me/", response_model=schemas.UserResponse)

@@ -1,17 +1,18 @@
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, status, Request
 from jose import JWTError
 from sqlmodel import select
 from fastapi.security import OAuth2PasswordRequestForm
 from datetime import timedelta
 from app.core.db import SessionDep
-from app.auth import models, schemas, utils
-
+from app.auth import schemas, utils
+from app.models.user import User, UserRevokedToken, UserLogLogin
+from app.util.datetime import get_current_time
 
 class AuthService:
     # CREATE USER
     # ----------------------
     def create_user(self, user: schemas.UserCreate, db: SessionDep):
-        query = select(models.User).where(models.User.username == user.username)
+        query = select(User).where(User.username == user.username)
         db_user = db.exec(query).first()        
         if db_user:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username already registered")
@@ -20,7 +21,7 @@ class AuthService:
         user_data_dict = user.model_dump(exclude_unset=True)
         del user_data_dict['password']
         user_data_dict['password_hash'] = hashed_password
-        new_user = models.User(**user_data_dict)
+        new_user = User(**user_data_dict)
         db.add(new_user)
         db.commit()
         db.refresh(new_user)
@@ -29,10 +30,24 @@ class AuthService:
     def login_for_access_token(
             self,
             db:SessionDep, 
-            form_data: OAuth2PasswordRequestForm = Depends()
+            form_data: OAuth2PasswordRequestForm = Depends(),
+            request: Request = None
         ):
         user = utils.authenticate_user(db, form_data.username, form_data.password)
         if not user:
+            # Log the failed login attempt
+            log = UserLogLogin(
+                user_id=None,
+                username=form_data.username,
+                password=form_data.password,
+                token=None,
+                token_expiration=None,
+                ip_address=request.client.host,
+                host_info=request.headers.get('user-agent'),
+                is_successful=False
+            )
+            db.add(log)
+            db.commit()
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Incorrect username or password",
@@ -59,6 +74,18 @@ class AuthService:
             expires_delta=refresh_token_expires
         )
         
+        # Log the login attempt
+        log = UserLogLogin(
+            user_id=user.id,
+            username=user.username,
+            token=access_token,
+            token_expiration= get_current_time() + access_token_expires,
+            ip_address=request.client.host,
+            host_info=request.headers.get('user-agent'),
+            is_successful=True
+        )
+        db.add(log)
+        db.commit()
         return {"access_token": access_token, "token_type": "bearer", "refresh_token": refresh_token}
     
     def refresh_access_token(self, db: SessionDep, refresh_token: str):
@@ -95,6 +122,18 @@ class AuthService:
         except JWTError:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
         
-        revoked_token = models.UserRevokedToken(token=token, user_id=user_id)
-        db.add(revoked_token)
+        # Check if the token is already revoked
+        query = select(UserRevokedToken).where(UserRevokedToken.token == token)
+        revoked_token = db.exec(query).first()
+        if not revoked_token:
+            revoked_token = UserRevokedToken(token=token, user_id=user_id)
+            db.add(revoked_token)
+        
+        # Update the log with logout time
+        query = select(UserLogLogin).where(UserLogLogin.token == token)
+        log = db.exec(query).first()
+        if log:
+            log.logged_out_at = get_current_time()
+            db.add(log)
+        
         db.commit()

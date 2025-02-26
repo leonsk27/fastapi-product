@@ -6,7 +6,7 @@ from .models import Customer
 from .schemas import CustomerCreate, CustomerUpdate
 from .service import CustomerService
 from app.auth.utils import get_current_user
-from app.auth.models import User
+from app.models.user import User
 
 router = APIRouter()
 service = CustomerService()

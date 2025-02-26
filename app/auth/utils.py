@@ -5,7 +5,7 @@ from sqlmodel import Session, select
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 
-from app.auth import models
+from app.models.user import User, UserRevokedToken
 from app.core.db import SessionDep
 from app.core.config import Config
 
@@ -32,7 +32,7 @@ def authenticate_user(db: Session, username: str, password: str):
     return user
 
 def get_user(db: Session, username: str):
-    query = select(models.User).where(models.User.username == username)
+    query = select(User).where(User.username == username)
     return db.exec(query).first()
 
 
@@ -64,7 +64,7 @@ def get_current_user(db: SessionDep, token: str = Depends(oauth2_scheme)):
         raise credentials_exception
     
     # Verificar si el token está revocado
-    query = select(models.UserRevokedToken).where(models.UserRevokedToken.token == token)
+    query = select(UserRevokedToken).where(UserRevokedToken.token == token)
     revoked_token = db.exec(query).first()
     if revoked_token:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token has been revoked")
