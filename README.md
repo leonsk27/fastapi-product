@@ -75,8 +75,21 @@ tuusuario:/fastapi-product/$ cp .env.example .env
 ```
 Editaremos el archivo .env creado y cambiaremos el valor de "DATABASE_URL"
 
+```
+DATABASE_URL="postgresql://user:password@localhost/fastapi_product"
+SECRET_KEY=XXXXXXX
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+REFRESH_TOKEN_EXPIRE_DAYS=7
+TIME_ZONE=-4
+```
+Tendrá generar un "SECRET_KEY"
 
-*DATABASE_URL = "postgresql://user:password@localhost/fastapi_product"*
+## Crear y Poblar la base de datos
+
+```
+tuusuario:/fastapi-product/$ PYTHONPATH=/opt/uab/fastapi-product python3 seeds/seed_create_app.py
+```
 
 ## Ejecutar en modo desarrollo
 
