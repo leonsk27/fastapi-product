@@ -27,3 +27,12 @@ class User(BaseModel, table=True):
         ),
         description="The timestamp when the data was last updated"
     )
+class UserRevokedToken(BaseModel, table=True):
+    __tablename__ = "user_revoked_token"
+    token: str = Field(index=True, unique=True)
+    user_id: int = Field(index=True)
+    revoked_at: Optional[datetime] = Field(
+        default_factory=get_current_time,
+        sa_column=Column(DateTime(timezone=False), nullable=True),
+        description="The timestamp when the token was Revoked"
+    )

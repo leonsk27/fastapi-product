@@ -5,10 +5,8 @@ from sqlmodel import Session, select
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 
-from app.auth import schemas, models
-
-from app.core.db import get_session, SessionDep
-from app.auth.models import User as UserModel
+from app.auth import models
+from app.core.db import SessionDep
 from app.core.config import Config
 
 SECRET_KEY = Config.SECRET_KEY
@@ -64,6 +62,13 @@ def get_current_user(db: SessionDep, token: str = Depends(oauth2_scheme)):
             raise credentials_exception
     except JWTError:
         raise credentials_exception
+    
+    # Verificar si el token está revocado
+    query = select(models.UserRevokedToken).where(models.UserRevokedToken.token == token)
+    revoked_token = db.exec(query).first()
+    if revoked_token:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token has been revoked")
+    
     user = get_user(db, username)
     if user is None:
         raise credentials_exception

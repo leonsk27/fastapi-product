@@ -86,3 +86,15 @@ class AuthService:
         
         return {"access_token": access_token, "token_type": "bearer"}
         
+    def logout(self, db: SessionDep, token: str):
+        try:
+            payload = utils.decode_token(token)
+            user_id: int = payload.get("id")
+            if user_id is None:
+                raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+        except JWTError:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+        
+        revoked_token = models.UserRevokedToken(token=token, user_id=user_id)
+        db.add(revoked_token)
+        db.commit()
