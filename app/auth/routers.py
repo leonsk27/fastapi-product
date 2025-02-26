@@ -1,11 +1,7 @@
-from datetime import timedelta
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlmodel import Session
+from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 from app.auth import schemas, utils
-from app.core.db import SessionDep,get_session
-from app.auth.models import User as UserModel
-
+from app.core.db import SessionDep
 from app.auth.service import AuthService
 
 router = APIRouter()

@@ -1,7 +1,6 @@
-from traceback import print_exception
 from fastapi import Depends, HTTPException, status
 from jose import JWTError
-from sqlmodel import Field, Session, SQLModel, select
+from sqlmodel import select
 from fastapi.security import OAuth2PasswordRequestForm
 from datetime import timedelta
 from app.core.db import SessionDep

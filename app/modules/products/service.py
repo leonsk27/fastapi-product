@@ -1,7 +1,6 @@
 from fastapi import HTTPException, status
-from sqlmodel import select
+from sqlmodel import select, Session
 from sqlalchemy.orm import selectinload
-from app.core.db import SessionDep
 from .models import Product
 from .schemas import ProductCreate, ProductUpdate
 from ..catalog.products_category.models import ProductCategory
@@ -11,7 +10,7 @@ class ProductService:
     no_task:str = "Product doesn't exits"
     # CREATE
     # ----------------------
-    def create_product(self, item_data: ProductCreate, session: SessionDep):
+    def create_product(self, item_data: ProductCreate, session: Session):
 
         product_db = Product.model_validate(item_data.model_dump())
         
@@ -42,7 +41,7 @@ class ProductService:
 
     # GET ONE
     # ----------------------
-    def get_product(self, item_id: int, session: SessionDep):
+    def get_product(self, item_id: int, session: Session):
         statement = (
             select(Product)
             .where(Product.id == item_id)
@@ -59,7 +58,7 @@ class ProductService:
 
     # UPDATE
     # ----------------------
-    def update_product(self, item_id: int, item_data: ProductUpdate, session: SessionDep):
+    def update_product(self, item_id: int, item_data: ProductUpdate, session: Session):
         product_db = session.get(Product, item_id)
         if not product_db:
             raise HTTPException(
@@ -74,7 +73,7 @@ class ProductService:
 
     # GET ALL PLANS
     # ----------------------
-    def get_products(self, session: SessionDep):
+    def get_products(self, session: Session):
         
         statement = (
             select(Product)
@@ -86,7 +85,7 @@ class ProductService:
 
     # DELETE
     # ----------------------
-    def delete_product(self, item_id: int, session: SessionDep):
+    def delete_product(self, item_id: int, session: Session):
         product_db = session.get(Product, item_id)
         if not product_db:
             raise HTTPException(

@@ -1,7 +1,6 @@
 from fastapi import HTTPException, status
-from sqlmodel import select
+from sqlmodel import select, Session
 
-from app.core.db import SessionDep
 from .models import ProductCategory
 from .schemas import ProductCategoryCreate, ProductCategoryUpdate
 
@@ -10,7 +9,7 @@ class ProductCategoryService:
     no_task:str = "Product doesn't exits"
     # CREATE
     # ----------------------
-    def create_product_category(self, item_data: ProductCategoryCreate, session: SessionDep):
+    def create_product_category(self, item_data: ProductCategoryCreate, session: Session):
         item_db = ProductCategory.model_validate(item_data.model_dump())
         session.add(item_db)
         session.commit()
@@ -19,7 +18,7 @@ class ProductCategoryService:
 
     # GET ONE
     # ----------------------
-    def get_product_category(self, item_id: int, session: SessionDep):
+    def get_product_category(self, item_id: int, session: Session):
         item_db = session.get(ProductCategory, item_id)
         if not item_db:
             raise HTTPException(
@@ -29,7 +28,7 @@ class ProductCategoryService:
 
     # UPDATE
     # ----------------------
-    def update_product_category(self, item_id: int, item_data: ProductCategoryUpdate, session: SessionDep):
+    def update_product_category(self, item_id: int, item_data: ProductCategoryUpdate, session: Session):
         item_db = session.get(ProductCategory, item_id)
         if not item_db:
             raise HTTPException(
@@ -44,12 +43,12 @@ class ProductCategoryService:
 
     # GET ALL PLANS
     # ----------------------
-    def get_product_categories(self, session: SessionDep):
+    def get_product_categories(self, session: Session):
         return session.exec(select(ProductCategory)).all()
 
     # DELETE
     # ----------------------
-    def delete_product_category(self, item_id: int, session: SessionDep):
+    def delete_product_category(self, item_id: int, session: Session):
         item_db = session.get(ProductCategory, item_id)
         if not item_db:
             raise HTTPException(
